@@ -95,8 +95,7 @@ class Parser {
             return new Expr.Grouping(expr);
         }
 
-        // To make it compile, complains about lack of return
-        return new Expr.Literal(EOF);
+        throw error(peek(), "Expect expression.");
     }
 
     private boolean match(TokenType... types) {
