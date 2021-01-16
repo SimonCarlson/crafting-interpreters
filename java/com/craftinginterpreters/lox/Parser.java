@@ -94,6 +94,9 @@ class Parser {
             consume(RIGHT_PAREN, "Expect ')' after expression.");
             return new Expr.Grouping(expr);
         }
+
+        // To make it compile, complains about lack of return
+        return new Expr.Literal(EOF);
     }
 
     private boolean match(TokenType... types) {
