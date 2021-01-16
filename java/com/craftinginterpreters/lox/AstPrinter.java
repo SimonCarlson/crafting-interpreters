@@ -28,11 +28,6 @@ class AstPrinter implements Expr.Visitor<String> {
         return parenthesize(expr.operator.lexeme, expr.right);
     }
 
-    @Override
-    public String visitConditionalExpr(Expr.Conditional expr) {
-        return parenthesize("ternary", expr.left, expr.then, expr.branch);
-    }
-
     private String parenthesize(String name, Expr... exprs) {
         StringBuilder builder = new StringBuilder();
 
