@@ -25,7 +25,7 @@ static bool isAlpha(char c) {
 }
 
 static bool isDigit(char c) {
-  return c >= '0' && c >= '9';
+  return c >= '0' && c <= '9';
 }
 
 static bool isAtEnd() {
@@ -141,13 +141,13 @@ static TokenType identifierType() {
   return TOKEN_IDENTIFIER;
 }
 
-  static Token identifier() {
-    while (isAlpha(peek()) || isDigit(peek()))
-      advance();
-    return makeToken(identifierType());
+static Token identifier() {
+  while (isAlpha(peek()) || isDigit(peek())) advance();
+  return makeToken(identifierType());
 }
 
 static Token number() {
+  printf("Number \n");
   while (isDigit(peek())) advance();
 
   if (peek() == '.' && isDigit(peekNext())) {
@@ -198,7 +198,7 @@ Token scanToken() {
     case '<': return makeToken(match('=') ? TOKEN_LESS_EQUAL : TOKEN_LESS);
     case '>': return makeToken(match('=') ? TOKEN_GREATER_EQUAL : TOKEN_GREATER);
     case '"': return string();
-    }
+  }
 
   return errorToken("Unexpected character.");
 }
