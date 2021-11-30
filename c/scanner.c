@@ -147,7 +147,6 @@ static Token identifier() {
 }
 
 static Token number() {
-  printf("Number \n");
   while (isDigit(peek())) advance();
 
   if (peek() == '.' && isDigit(peekNext())) {
