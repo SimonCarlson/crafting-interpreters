@@ -188,6 +188,19 @@ static void string() {
                                   parser.previous.length - 2)));
 }
 
+static uint8_t identifierConstant(Token *name) {
+  return makeConstant(OBJ_VAL(copyString(name->start, name->length)));
+}
+
+static void namedVariable(Token name) {
+  uint8_t arg = identifierConstant(&name);
+  emitBytes(OP_GET_GLOBAL, arg);
+}
+
+static void variable() {
+  namedVariable(parser.previous);
+}
+
 static void unary() {
   TokenType operatorType = parser.previous.type;
 
@@ -220,7 +233,7 @@ ParseRule rules[] = {
   [TOKEN_GREATER_EQUAL] = {NULL,     binary, PREC_COMPARISON},
   [TOKEN_LESS]          = {NULL,     binary, PREC_COMPARISON},
   [TOKEN_LESS_EQUAL]    = {NULL,     binary, PREC_COMPARISON},
-  [TOKEN_IDENTIFIER]    = {NULL,     NULL,   PREC_NONE},
+  [TOKEN_IDENTIFIER]    = {variable, NULL,   PREC_NONE},
   [TOKEN_STRING]        = {string,   NULL,   PREC_NONE},
   [TOKEN_NUMBER]        = {number,   NULL,   PREC_NONE},
   [TOKEN_AND]           = {NULL,     NULL,   PREC_NONE},
@@ -258,10 +271,6 @@ static void parsePrecedence(Precedence precedence) {
     ParseFn infixRule = getRule(parser.previous.type)->infix;
     infixRule();
   }
-}
-
-static uint8_t identifierConstant(Token* name) {
-  return makeConstant(OBJ_VAL(copyString(name->start, name->length)));
 }
 
 static uint8_t parseVariable(const char* errorMessage) {
